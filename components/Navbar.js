@@ -24,7 +24,7 @@ export default function () {
     })
     setUser(null)
     if(res.ok){
-        router.push("/")
+        router.push("/login")
     }
   }
 
