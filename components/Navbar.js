@@ -1,12 +1,12 @@
 "use client";
 
-import { Search, User, ShoppingCart } from "lucide-react";
+import { Search, User, ShoppingCart, Package } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 export default function () {
-    const router = useRouter()
-
+  const router = useRouter();
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -18,15 +18,13 @@ export default function () {
     fetchUser();
   }, []);
 
-  const handleLogout = async () =>{
-    const res = await fetch("/api/auth/logout",{
-        method: 'POST',
-    })
-    setUser(null)
-    if(res.ok){
-        router.push("/login")
+  const handleLogout = async () => {
+    const res = await fetch("/api/auth/logout", { method: "POST" });
+    setUser(null);
+    if (res.ok) {
+      router.push("/login");
     }
-  }
+  };
 
   return (
     <nav className="flex items-center justify-between bg-slate-900 px-8 py-3 shadow-md gap-6">
@@ -43,25 +41,51 @@ export default function () {
         />
       </div>
 
-      <div className="text-slate-200 flex items-center gap-6 ">
+      <div className="text-slate-200 flex items-center gap-6">
         {user ? (
-          <div className="flex items-center gap-1.5 cursor-pointer hover:text-emerald-400 transition-colors ">
+          <div className="flex items-center gap-1.5 cursor-pointer hover:text-emerald-400 transition-colors">
             <User size={20} />
             <span
-            onClick={handleLogout}
-             className="text-sm font-medium">Logout</span>
+              onClick={handleLogout}
+              className="text-sm font-medium cursor-pointer"
+            >
+              Logout
+            </span>
           </div>
         ) : (
-          <div className="flex items-center gap-1.5 cursor-pointer hover:text-emerald-400 transition-colors ">
+          <Link
+            href="/login"
+            className="flex items-center gap-1.5 cursor-pointer hover:text-emerald-400 transition-colors"
+          >
             <User size={20} />
             <span className="text-sm font-medium">Login</span>
-          </div>
+          </Link>
         )}
 
-        <div className="flex items-center gap-1.5 cursor-pointer hover:text-emerald-400 transition-colors ">
+        <Link
+          href="/orders"
+          className="flex items-center gap-1.5 cursor-pointer hover:text-emerald-400 transition-colors"
+        >
+          <Package size={20} />
+          <span className="text-sm font-medium">Orders</span>
+        </Link>
+
+        <Link
+          href="/cart"
+          className="flex items-center gap-1.5 cursor-pointer hover:text-emerald-400 transition-colors"
+        >
           <ShoppingCart size={20} />
           <span className="text-sm font-medium">Cart</span>
-        </div>
+        </Link>
+
+        {user && user.role === "admin" && (
+          <Link
+            href="/admin"
+            className="flex items-center gap-1.5 cursor-pointer hover:text-emerald-400 transition-colors"
+          >
+            <span className="text-sm font-medium">Admin</span>
+          </Link>
+        )}
       </div>
     </nav>
   );

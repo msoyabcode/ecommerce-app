@@ -78,7 +78,7 @@ export async function GET (req){
             }
 
     }catch(error){
-        console.error("error.message")
+        console.error(error.message)
         return Response.json(
             {message: "failed to fetch cart"},
             {status: 500}
